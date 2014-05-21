@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<!--[if lte IE 8]><meta http-equiv="X-UA-Compatible" content="chrome=1" /><![endif]-->
+<title>Stars</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<script type="application/javascript" src="webgl-2d.js"></script>
+<script type="application/javascript" src="core/ns.js"></script>
+<script type="application/javascript" src="core/list.js"></script>
+<script type="application/javascript" src="core/math.js"></script>
+<script type="application/javascript" src="core/input.js"></script>
+<script type="application/javascript" src="core/core.js"></script>
+<script type="application/javascript" src="entity/entity.js"></script>
+<script type="application/javascript" src="asset/gfx.js"></script>
+<script type="application/javascript" src="asset/star.js"></script>
+<script type="application/javascript" src="rastro.js"></script>
+<script type="application/javascript" src="module/renderer.js"></script>
+<script type="application/javascript" src="module/keyboardcontroller.js"></script>
+<script type="application/javascript" src="module/camcontroller.js"></script>
+<script type="application/javascript" src="module/particlestarsystem.js"></script>
+<script type="application/javascript" src="module/worldboundscorrector.js"></script>
+<script type="application/javascript" src="module/motion.js"></script>
+<script type="application/javascript" src="module/scrolladjust.js"></script>
+<script type="application/javascript" src="module/lifespan.js"></script>
+<script type="application/javascript" src="module/bulletshot.js"></script>
+<script type="application/javascript" src="module/shieldsystem.js"></script>
+<script type="application/javascript" src="module/ai.js"></script>
+<script type="application/javascript" src="world.js"></script>
+<script type="application/javascript" src="geturlvars.js"></script>
+<script type="application/javascript" src="lib/howler.js"></script>
+<script type="application/javascript" src="lib/Stats.js"></script>
+<script type="application/javascript" src="boot.js"></script>
+</head>
+<style type="text/css">
+
+canvas {
+    image-rendering: optimizeSpeed;
+    image-rendering:-o-crisp-edges;
+    image-rendering:-webkit-optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+</style>
+
+
+<body>
+<h1>WASD: controlar, SHIFT: mantener dir., RATON: mover fondo, ENTER: pause</h1>
+
+<div id="container"></div>
+<p><canvas id="canvas" width="1200" height="600" style="background:#999">
+Canvas not supported by your browser.
+</canvas></p>
+
+<div id="hey"></div>
+<div id="naves"></div>
+</body>
+</html>
+

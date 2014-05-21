@@ -1,0 +1,18 @@
+body {
+	color: red;
+	background-color: black;
+	font-family: "Arial";
+}
+
+#content {
+	display: block;
+	left: 100px;
+}
+
+canvas {
+	/*cursor: none;*/
+}
+
+#container {
+	
+}
