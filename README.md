@@ -1,5 +1,5 @@
 AUTHORING
 ---
-me: code, graphics, music
-nosghy: graphics
-rebootzdabrain: graphics
+* me: code, graphics, music
+* nosghy: graphics
+* rebootzdabrain: graphics
