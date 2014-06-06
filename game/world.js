@@ -1,7 +1,7 @@
 
 SSK.namespace("SSK.game");
-
-SSK.game.World = function( cam, player, renderer, w, h ){
+SSK.game.World = null;
+SSK.game.WorldObj = function( cam, player, renderer, w, h ){
 
 	this.width = w;
 	this.height = h;
@@ -42,7 +42,7 @@ function foo (boo) {
 var entitynum = 0;
 var ok = false;
 
-SSK.game.World.prototype = {
+SSK.game.WorldObj.prototype = {
 
 	addModule : function(m) {
 		this.modulelist.push(m);
