@@ -22,7 +22,7 @@ SSK.screen.MenuScreen = {
 	enter : false,
 
 	init : function() {
-		
+		this.enter = false;
 		this.options = [];
 		this.options.push({
 			img0 : SSK.game.gfx.SpriteCache.SP_NEWGAME_0,
@@ -103,6 +103,7 @@ SSK.screen.MenuScreen = {
 	dispose : function() {
 		window.removeEventListener( 'keydown', this.keydownhandler );
 		intromusic.stop();
+		this.enter = false;
 	}
 
 };

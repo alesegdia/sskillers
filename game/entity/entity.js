@@ -44,6 +44,7 @@ SSK.game.entity.PlayerShip = function( ){
 	this.CCollision = {
 		handle : function(other){
 			if( other.CBullet && other.CAlive && other.CBullet.enemy == true ){
+				SSK.game.World.shake += 10;
 				that.CShield.lastHit = 0;
 				that.CShield.current -= other.CBullet.power;
 				hitsound.play();
@@ -55,6 +56,7 @@ SSK.game.entity.PlayerShip = function( ){
 
 				if( that.CHealth <= 0 ){
 					that.CAlive = false;
+					SSK.screen.Manager.nextScreen = SSK.screen.MenuScreen;
 				}
 				other.CAlive = false;
 			}

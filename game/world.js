@@ -3,6 +3,9 @@ SSK.namespace("SSK.game");
 SSK.game.World = null;
 SSK.game.WorldObj = function( cam, player, renderer, w, h ){
 
+	this.shake = 0;
+	this.shakemax = 10;
+	this.shakedecay = 30;
 	this.width = w;
 	this.height = h;
 
@@ -92,6 +95,10 @@ SSK.game.WorldObj.prototype = {
 
 	tick : function()
 	{
+		this.shake -= this.shakedecay * SSK.core.deltaTime;
+		if( this.shake <= 0 ) this.shake = 0;
+		else if( this.shake >= this.shakemax ) this.shake = this.shakemax;
+
 		var j, x, y, inRange, margin, modules;
 		var entitylist
 		modules = this.modulelist;
@@ -152,6 +159,16 @@ SSK.game.WorldObj.prototype = {
 
 	render : function()
 	{
+		var ctx = this.renderer.context2d;
+		ctx.save();
+
+
+		var dir = new Vec2( Math.random() * 2 - 1, Math.random() * 2 - 1 );
+		dir = norm(dir);
+		dir.scaleXY(this.shake, this.shake);
+		ctx.translate(dir.x, dir.y);
+
+
 		var x1,x2,y1,y2,rend,camera,posx,posy;
 		x1 = this.cam.CTransform.x;
 		y1 = this.cam.CTransform.y;
@@ -229,7 +246,6 @@ SSK.game.WorldObj.prototype = {
 		this.renderer.context2d.fillStyle='#FFF';
 		this.renderer.context2d.fillText("entidades: " + entitynum, 0, 10 );
 
-		var ctx = this.renderer.context2d;
 		var dm = SSK.input.deltaMouse;
 		var mod = module(dm);
 		var inact, act, extra;
@@ -274,8 +290,7 @@ SSK.game.WorldObj.prototype = {
 		ctx.stroke();
 
 
-
-
+		ctx.restore();
 
 	}
 

@@ -1,9 +1,5 @@
 
 
-//var player = new SSK.entity.Player( 100, 100, 0, 0, 0, "../media/dforce.png" );
-
-// ENTITIES
-
 // MODULES
 var renderer = null;
 var world = null;
@@ -14,7 +10,6 @@ var intromusic = new Howl({ urls: ['../media/music/intro.mp3'], loop: true, volu
 var payum_payum_motherfucker = new Howl({ urls: ['../media/sfx/disparo.wav'], volume: 0.1 });
 var deadsound = new Howl({ urls: ['../media/sfx/dead.mp3'], volume: 1.0 });
 var hitsound = new Howl({ urls: ['../media/sfx/Explosion29.wav'], volume: 0.3 });
-
 
 // INPUT
 window.addEventListener( 'load', init, false );
@@ -58,6 +53,7 @@ function run(){
 
 	stats.begin();
 	SSK.core.deltaTime = ( (Date.now()-prevtime) / 1000 );
+	TWEEN.update(SSK.core.deltaTime);
 	SSK.core.time = Date.now();
 	prevtime = Date.now();
 
