@@ -17,12 +17,21 @@ SSK.module.KeyboardController.prototype = {
 
 		if(e.CInputState.left ){
 			e.CVelocity.x = -e.CMaxVelocity.x;
-			if( e.CInputState.shift == false )
+			if( e.CInputState.shift == true )
 				e.CRender.faceLeft = true;
 		} else if (e.CInputState.right ){
 			e.CVelocity.x = e.CMaxVelocity.x;
-			if( e.CInputState.shift == false )
+			if( e.CInputState.shift == true )
 				e.CRender.faceLeft = false;
+		}
+
+		if( e.CInputState.q == true )
+		{
+			e.CRender.faceLeft = true;
+		}
+		else if( e.CInputState.w == true )
+		{
+			e.CRender.faceLeft = false;
 		}
 
 		e.CVelocity.x *= SSK.core.deltaTime;
@@ -31,7 +40,7 @@ SSK.module.KeyboardController.prototype = {
 
 	performsOver : function(e) {
 		//return e.CPlayer;
-		return e.CPlayer || e.CEnemy;
+		return e.CPlayer || e.CKeyControl;
 	}
 
 };

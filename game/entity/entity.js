@@ -8,7 +8,7 @@ SSK.game.entity.Camera = function( ){
 	this.CTransform = new Vec2( 1000, 1000 );
 	this.CBox = new Vec2( 0, 0 );
 	this.CCamera = true;
-	this.CSpeedFactor = new Vec2( 0.06, 0.06 );
+	this.CSpeedFactor = new Vec2( 50, 50 );
 	this.CVelocity = new Vec2( 0, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
 	this.CAlive = true;
@@ -26,7 +26,7 @@ SSK.game.entity.PlayerShip = function( ){
 	this.CBox = new Vec2( 20, 20 );
 	this.CVelocity = new Vec2( 0, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
-	this.CMaxVelocity = new Vec2( 2000, 1500 );
+	this.CMaxVelocity = new Vec2( 3000, 2250 );
 	this.CGauge = 4;
 
 	this.CHealth = 15;
@@ -82,18 +82,6 @@ SSK.game.entity.PlayerShip = function( ){
 
 };
 
-SSK.game.entity.EnemyGenerator = function( px, py ){
-
-	this.CRender = {
-		faceLeft : true,
-		sprite : SSK.game.gfx.SpriteCache.SP_GEN
-	};
-
-	this.CTransform = new Vec2( px, py );
-	this.CBox = new Vec2( this.CRender.sprite.width, this.CRender.sprite.height );
-
-};
-
 SSK.game.entity.EnemyShip = function( px, py ){
 
 	this.CRender = {
@@ -118,7 +106,7 @@ SSK.game.entity.EnemyShip = function( px, py ){
 		left : false,
 		right : false,
 		attack : false,
-		shift : false,
+		shift : true,
 		pause : false,
 		reset : function(){
 			this.up=this.down=this.left=this.right=this.attack=this.shift=this.pause=false;
@@ -128,6 +116,7 @@ SSK.game.entity.EnemyShip = function( px, py ){
 	var that = this;
 	this.CCollision = {
 		handle : function(other){
+			that.CInputState.shift = true;
 			if( other.CBullet && other.CAlive && other.CBullet.enemy == false ){
 				that.CHealth -= other.CBullet.power;
 				// poner este check en un sistema
@@ -147,6 +136,7 @@ SSK.game.entity.EnemyShip = function( px, py ){
 	};
 
 
+	this.CKeyControl = true;
 	var mytr = this.CTransform;
 	var myci = this.CInputState;
 	this.CBehaviour = {
@@ -187,6 +177,52 @@ SSK.game.entity.EnemyShip = function( px, py ){
 
 };
 
+
+SSK.game.entity.EnemyGenerator = function( px, py ){
+
+	this.CRender = {
+		faceLeft : true,
+		sprite : SSK.game.gfx.SpriteCache.SP_GEN
+	};
+
+	this.CAlive = true;
+	this.CMaxHealth = 400;
+	this.CHealth = 400;
+
+	this.CCollision = {
+		handle : function(other){
+			if( other.CBullet && other.CAlive && other.CBullet.enemy == false ){
+				that.CHealth -= other.CBullet.power;
+				// poner este check en un sistema
+				if( that.CHealth <= 0 ){
+					that.CAlive = false;
+				}
+				other.CAlive = false;
+			}
+		}
+	};
+
+	this.CEnemy = true;
+	this.CTransform = new Vec2( px, py );
+	this.CBox = new Vec2( this.CRender.sprite.width, this.CRender.sprite.height );
+	var that = this;
+	this.CBehaviour = {
+		next_spawn : 0,
+		spawn_rate : 4000,
+		action : function(pl) {
+			if( this.next_spawn < SSK.core.time )
+			{
+				this.next_spawn = SSK.core.time + this.spawn_rate;
+				SSK.game.World.addEntity( new SSK.game.entity.EnemyShip(
+							that.CTransform.x + randomRange(200,300) , that.CTransform.y + randomRange(150,250) ) );
+			}
+		}
+	};
+
+
+};
+
+
 SSK.game.entity.Bullet = function( px, py, enemyBullet, pow ){
 
 	this.CRender = {
@@ -204,7 +240,7 @@ SSK.game.entity.Bullet = function( px, py, enemyBullet, pow ){
 	this.CAlive = true;
 	this.CTransform = new Vec2( px, py );
 	this.CBox = new Vec2( this.CRender.sprite.width, this.CRender.sprite.height );
-	this.CVelocity = new Vec2( 40, 0 );
+	this.CVelocity = new Vec2( 80, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
 
 	this.CBullet = {

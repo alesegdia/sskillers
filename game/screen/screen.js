@@ -18,9 +18,10 @@ SSK.screen.Manager = {
 
 	currentScreen : null,
 	nextScreen : null,
-	gameplayScreen : null,
+	ctx : null,
 
-	init : function( firstScreen ){
+	init : function( firstScreen, ctx ){
+		this.ctx = ctx;
 		this.currentScreen = firstScreen;
 		this.currentScreen.init();
 	},
@@ -30,14 +31,13 @@ SSK.screen.Manager = {
 		if( this.nextScreen !== null ){
 			this.currentScreen.dispose();
 			this.currentScreen = this.nextScreen;
-			this.currentScreen.reset();
-			this.currentScreen = nextScreen;
+			this.currentScreen.init();
 			this.nextScreen = null;
 		}
 	},
 
-	render : function( ctx ){
-		this.currentScreen.render( );
+	render : function( ){
+		this.currentScreen.render( this.ctx );
 	},
 
 	changeScreen : function( screen ){
@@ -48,4 +48,5 @@ SSK.screen.Manager = {
 
 
 };
+
 

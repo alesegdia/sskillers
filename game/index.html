@@ -30,6 +30,8 @@
 <script type="application/javascript" src="world.js"></script>
 <script type="application/javascript" src="screen/screen.js"></script>
 <script type="application/javascript" src="screen/gameplayscreen.js"></script>
+<script type="application/javascript" src="screen/menuscreen.js"></script>
+<script type="application/javascript" src="screen/storyscreen.js"></script>
 <script type="application/javascript" src="geturlvars.js"></script>
 <script type="application/javascript" src="lib/howler.js"></script>
 <script type="application/javascript" src="lib/Stats.js"></script>
@@ -41,16 +43,22 @@ canvas {
     image-rendering: optimizeSpeed;
     image-rendering:-o-crisp-edges;
     image-rendering:-webkit-optimize-contrast;
-    -ms-interpolation-mode: nearest-neighbor;
+	-ms-interpolation-mode: nearest-neighbor;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
 }
 </style>
 
 
 <body>
-<h1>WASD: controlar, SHIFT: mantener dir., RATON: mover fondo, ENTER: pause</h1>
 
 <div id="container"></div>
-<p><canvas id="canvas" width="1200" height="600" style="background:#999">
+<p><canvas id="canvas" width="1200" height="550" style="background:#999">
 Canvas not supported by your browser.
 </canvas></p>
 

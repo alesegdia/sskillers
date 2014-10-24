@@ -11,19 +11,11 @@ SSK.module.ParticleStarSystem = function( nStars, maxw, maxh ){
 SSK.module.ParticleStarSystem.prototype = {
 
 	render : function( ctx ) {
-		var px = ctx.createImageData(1,1);
-		var d  = px.data;
-		d[0] = 255;
-		d[1] = 255;
-		d[2] = 255;
-		d[3] = 255;
-
 		for( var i = 0; i < this.stars.length - 1 ; i++ ){
 
-			ctx.putImageData( px, this.stars[i].x, this.stars[i].y );
-			//ctx.putImageData( px, this.stars[i].x+1, this.stars[i].y );
-			//ctx.putImageData( px, this.stars[i].x, this.stars[i].y+1 );
-			//ctx.putImageData( px, this.stars[i].x+1, this.stars[i].y+1 );
+			var s = this.stars[i].speedX;
+			ctx.fillStyle="#FFFFFF";
+			ctx.fillRect(this.stars[i].x,this.stars[i].y,s*2,s*2);
 		}
 	},
 

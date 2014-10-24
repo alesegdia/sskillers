@@ -49,6 +49,10 @@ var sign = function(number) {
 	return number ? number < 0 ? -1 : 1 : 0;
 }
 
+var module = function(v) {
+	return Math.sqrt(v.x*v.x + v.y*v.y);
+}
+
 var norm = function(v) {
 	var mod = Math.sqrt(v.x*v.x + v.y*v.y);
 	return new Vec2(v.x/mod, v.y/mod);

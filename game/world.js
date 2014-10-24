@@ -209,11 +209,11 @@ SSK.game.WorldObj.prototype = {
 					}
 					if( entity.CEnemy )
 					{
-						var barsz = entity.CMaxHealth*4;
+						var mult = 1;
 						rend.context2d.fillStyle="#FF0000";
-						rend.context2d.fillRect( posx + entity.CHealth*4, posy + 10, (entity.CMaxHealth-entity.CHealth) * 4, 5 );
+						rend.context2d.fillRect( posx + entity.CHealth * mult, posy + 10, (entity.CMaxHealth-entity.CHealth) * mult, 5 );
 						rend.context2d.fillStyle="#00FF00";
-						rend.context2d.fillRect( posx, posy + 10, entity.CHealth*4, 5 );
+						rend.context2d.fillRect( posx, posy + 10, entity.CHealth*mult, 5 );
 					}
 
 				}
@@ -228,6 +228,52 @@ SSK.game.WorldObj.prototype = {
 
 		this.renderer.context2d.fillStyle='#FFF';
 		this.renderer.context2d.fillText("entidades: " + entitynum, 0, 10 );
+
+		var ctx = this.renderer.context2d;
+		var dm = SSK.input.deltaMouse;
+		var mod = module(dm);
+		var inact, act, extra;
+		var vec = norm(dm);
+		if( mod < 0.1 )
+		{
+			inact = { x:dm.x, y:dm.y };
+			act = { x:0, y:0 };
+			extra = { x:0, y:0 };
+		}
+		else if( mod >= 0.1 && mod <= 0.5 )
+		{
+			inact = { x:vec.x * 0.1,y:vec.y * 0.1 };
+			act = { x:dm.x, y:dm.y };
+			extra = { x:0, y:0 };
+		}
+		else
+		{
+			inact = { x:vec.x * 0.1,y:vec.y * 0.1 };
+			act = { x:vec.x * 0.5,y:vec.y * 0.5 };
+			extra = { x:dm.x, y:dm.y };
+		}
+
+		var h = this.renderer.canvas2d.height/2;
+
+		ctx.strokeStyle = "rgb(0,0,255)";
+		ctx.beginPath();
+		ctx.moveTo(this.renderer.canvas2d.width/2+ h * act.x, this.renderer.canvas2d.height/2 + h * act.y);
+		ctx.lineTo(this.renderer.canvas2d.width/2+ h * extra.x, this.renderer.canvas2d.height/2 + h * extra.y);
+		ctx.stroke();
+
+		ctx.strokeStyle = "rgb(0,255,0)";
+		ctx.beginPath();
+		ctx.moveTo(this.renderer.canvas2d.width/2+ h * inact.x, this.renderer.canvas2d.height/2 + h * inact.y);
+		ctx.lineTo(this.renderer.canvas2d.width/2+ h * act.x, this.renderer.canvas2d.height/2 + h * act.y);
+		ctx.stroke();
+
+		ctx.strokeStyle = "rgb(255,0,0)";
+		ctx.beginPath();
+		ctx.moveTo(this.renderer.canvas2d.width/2, this.renderer.canvas2d.height/2);
+		ctx.lineTo(this.renderer.canvas2d.width/2+ h * inact.x, this.renderer.canvas2d.height/2 + h * inact.y);
+		ctx.stroke();
+
+
 
 
 
