@@ -8,7 +8,7 @@ SSK.game.entity.Camera = function( ){
 	this.CTransform = new Vec2( 1000, 1000 );
 	this.CBox = new Vec2( 0, 0 );
 	this.CCamera = true;
-	this.CSpeedFactor = new Vec2( 50, 50 );
+	this.CSpeedFactor = new Vec2( 200, 200 );
 	this.CVelocity = new Vec2( 0, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
 	this.CAlive = true;
@@ -30,6 +30,7 @@ SSK.game.entity.PlayerShip = function( ){
 	this.CGauge = 4;
 
 	this.CHealth = 15;
+	this.CMaxHealth = 15;
 	this.CShield = {
 		maxShield : 8,
 		current : 5,
@@ -83,6 +84,16 @@ SSK.game.entity.PlayerShip = function( ){
 	};
 
 };
+
+SSK.game.entity.Powerup = function( px, py, spr )
+{
+	this.CRender = {
+		faceLeft : true,
+		sprite : spr
+	};
+	this.CTransform = new Vec2( px, py );
+	this.CBox = new Vec2( this.CRender.sprite.width, this.CRender.sprite.height );
+}
 
 SSK.game.entity.EnemyShip = function( px, py ){
 

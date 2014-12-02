@@ -151,8 +151,13 @@ SSK.game.WorldObj.prototype = {
 	drawGui : function( x, y )
 	{
 		this.renderer.context2d.drawImage( SSK.game.gfx.SpriteCache.SP_GUI, x , y );
+
+		this.drawBar( SSK.game.gfx.SpriteCache.SP_ARMORBAR_, this.player.CMaxHealth, x + 78, y + 258 );
 		this.drawBar( SSK.game.gfx.SpriteCache.SP_ARMORBAR, this.player.CHealth, x + 78, y + 258 );
+
+		this.drawBar( SSK.game.gfx.SpriteCache.SP_SHIELDBAR_, this.player.CShield.maxShield, x + 78, y + 228 );
 		this.drawBar( SSK.game.gfx.SpriteCache.SP_SHIELDBAR, this.player.CShield.current, x + 78, y + 228 );
+
 		this.drawBar( SSK.game.gfx.SpriteCache.SP_GAUGEBAR, this.player.CGauge, x + 78, y + 288 );
 		this.drawMinimap( x + 75, y + 40, 0.05, this.renderer.context2d );
 	},

@@ -8,6 +8,9 @@ SSK.game.gfx.SpriteCache.SP_AFORCE.src = "../../media/img/aforce.png";
 SSK.game.gfx.SpriteCache.SP_ARMORBAR = new Image();
 SSK.game.gfx.SpriteCache.SP_ARMORBAR.src = "../../media/img/armorbar.png";
 
+SSK.game.gfx.SpriteCache.SP_ARMORBAR_ = new Image();
+SSK.game.gfx.SpriteCache.SP_ARMORBAR_.src = "../../media/img/armorbar_.png";
+
 SSK.game.gfx.SpriteCache.SP_BULLET = new Image();
 SSK.game.gfx.SpriteCache.SP_BULLET.src = "../../media/img/bullet.png";
 
@@ -58,6 +61,9 @@ SSK.game.gfx.SpriteCache.SP_NEWGAME_1.src = "../../media/img/newgame-1.png";
 
 SSK.game.gfx.SpriteCache.SP_SHIELDBAR = new Image();
 SSK.game.gfx.SpriteCache.SP_SHIELDBAR.src = "../../media/img/shieldbar.png";
+
+SSK.game.gfx.SpriteCache.SP_SHIELDBAR_ = new Image();
+SSK.game.gfx.SpriteCache.SP_SHIELDBAR_.src = "../../media/img/shieldbar_.png";
 
 SSK.game.gfx.SpriteCache.SP_SLIDE0 = new Image();
 SSK.game.gfx.SpriteCache.SP_SLIDE0.src = "../../media/img/slide0.png";

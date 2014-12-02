@@ -3,6 +3,7 @@ SSK.namespace("SSK.module");
 
 SSK.module.ParticleStarSystem = function( nStars, maxw, maxh ){
 	this.stars = new Array( nStars );
+	this.factor = 0.1;
 	for( var i = 0; i < this.stars.length; i++ ){
 		this.stars[i] = new Star( maxw, maxh );
 	}
@@ -22,7 +23,7 @@ SSK.module.ParticleStarSystem.prototype = {
 	tick : function( cam ){
 
 		for( var i = 0; i < this.stars.length - 1; i++ ){
-			this.stars[i].update( -cam.CVelocity.x, -cam.CVelocity.y );
+			this.stars[i].update( -cam.CVelocity.x * this.factor, -cam.CVelocity.y * this.factor );
 		}
 
 	},
