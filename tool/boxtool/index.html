@@ -1,0 +1,143 @@
+
+
+<body>
+<label>Image File:</label><br/>
+<input type="file" id="imageLoader" name="imageLoader"/><br />
+<br />
+<label>JSON file:</label><br/>
+<input type="file" id="jsonLoader" name="jsonLoader"/>
+<br />
+<br />
+<canvas id="imageCanvas"></canvas>
+<button onclick="savetofile()">save!</button>
+
+
+<script type="application/javascript">
+
+requestAnimFrame = (function() {
+  return window.requestAnimationFrame ||
+     window.webkitRequestAnimationFrame ||
+     window.mozRequestAnimationFrame ||
+     window.oRequestAnimationFrame ||
+     window.msRequestAnimationFrame ||
+     function(/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
+       window.setTimeout(callback, 1000/60);
+     };
+})();
+
+var imageLoader = document.getElementById('imageLoader');
+imageLoader.addEventListener('change', handleImage, false);
+var jsonLoader = document.getElementById('jsonLoader');
+jsonLoader.addEventListener('change', handleJson, false);
+
+var canvas = document.getElementById('imageCanvas');
+var ctx = canvas.getContext('2d');
+
+var img = null;
+function handleImage(e){
+	var reader = new FileReader();
+	reader.onload = function(event){
+		img = new Image();
+		img.onload = function(){
+			canvas.width = img.width;
+			canvas.height = img.height;
+			ctx.drawImage(img,0,0);
+		}
+		img.src = event.target.result;
+	}
+	reader.readAsDataURL(e.target.files[0]);
+}
+
+var bleh;
+function handleJson(e){
+	var reader = new FileReader();
+	reader.onload = function(event){
+		rectdata = eval("(" + window.atob(event.target.result.split(',')[1]) + ")");
+		bleh = event.target.result;
+	}
+	reader.readAsDataURL(e.target.files[0]);
+}
+
+
+
+var p1, p2, rectdata = [];
+var tmp;
+canvas.addEventListener("mousedown", function(event) {
+	var x = event.x;
+	var y = event.y;
+	var canvas = document.getElementById("imageCanvas");
+	x -= canvas.offsetLeft;
+	y -= canvas.offsetTop;
+	console.log(x, y);
+	p1 = [x,y];
+	tmp = [0,0];
+}, false);
+
+
+canvas.addEventListener("mouseup", function(event) {
+	var x = event.x;
+	var y = event.y;
+	var canvas = document.getElementById("imageCanvas");
+	x -= canvas.offsetLeft;
+	y -= canvas.offsetTop;
+	console.log(x, y);
+	p2 = [x-p1[0],y-p1[1]];
+	rectdata.push([p1, p2]);
+	p1 = null;
+	tmp = null;
+}, false);
+
+canvas.addEventListener("mousemove", function(event) {
+	if( tmp != null )
+	{
+		var x = event.x;
+		var y = event.y;
+		var canvas = document.getElementById("imageCanvas");
+		x -= canvas.offsetLeft;
+		y -= canvas.offsetTop;
+		console.log("movin");
+		tmp[0] = x - p1[0];
+		tmp[1] = y - p1[1];
+		console.log(tmp);
+	}
+}, false);
+
+
+var render = function()
+{
+	ctx.fillStyle = "rgb(255,0,0)";
+	ctx.strokeWidth = 10;
+	ctx.fillRect(0,0,canvas.width, canvas.height);
+	ctx.strokeStyle = "rgb(0,0,255)";
+	if( img != null )
+		ctx.drawImage(img, 0, 0, img.width, img.height);
+	for( var i = 0; i < rectdata.length; i++ )
+	{
+		r = rectdata[i];
+		ctx.strokeRect(r[0][0], r[0][1], r[1][0], r[1][1]);
+		ctx.strokeRect(r[0][0], r[0][1], r[1][0], r[1][1]);
+		ctx.strokeRect(r[0][0], r[0][1], r[1][0], r[1][1]);
+	}
+
+	if( p1 != null )
+	{
+		ctx.strokeStyle = "rgba(0,0,255,255)";
+		ctx.strokeRect(p1[0], p1[1], tmp[0], tmp[1]);
+		ctx.strokeRect(p1[0], p1[1], tmp[0], tmp[1]);
+		ctx.strokeRect(p1[0], p1[1], tmp[0], tmp[1]);
+	}
+	requestAnimFrame(render);
+}
+
+var savetofile = function()
+{
+	var url = 'data:text/json;charset=utf8,' + encodeURIComponent(JSON.stringify(rectdata));
+	window.open(url, '_blank');
+	window.focus();
+}
+
+
+
+requestAnimFrame(render);
+</script>
+</body>
