@@ -50,8 +50,8 @@ Vec2.prototype = {
 	},
 
 	cap : function(x,y) {
-		if( Math.abs(this.x) > x ) this.x = x * sign(this.x);
-		if( Math.abs(this.y) > y ) this.y = y * sign(this.y);
+		if( Math.abs(this.x) > x ) this.x = Math.abs(x) * sign(this.x);
+		if( Math.abs(this.y) > y ) this.y = Math.abs(y) * sign(this.y);
 	},
 
 	mod : function() {
