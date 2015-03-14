@@ -101,6 +101,8 @@ SSK.game.entity.PlayerShip = function( ){
 		down : false,
 		left : false,
 		right : false,
+		xaxis : 0,
+		yaxis : 0,
 		attack : false,
 		shift : false,
 		pause : false
@@ -137,15 +139,13 @@ SSK.game.entity.EnemyShip = function( px, py ){
 	this.CEnemy = true;
 
 	this.CInputState = {
-		up : false,
-		down : false,
-		left : false,
-		right : false,
+		xaxis : 0,
+		yaxis : 0,
 		attack : false,
 		shift : true,
 		pause : false,
 		reset : function(){
-			this.up=this.down=this.left=this.right=this.attack=this.shift=this.pause=false;
+			this.attack=this.shift=this.pause=false;
 		}
 	};
 
@@ -188,14 +188,14 @@ SSK.game.entity.EnemyShip = function( px, py ){
 			var tol = 10;
 			if( distance( pltr.x, pltr.y, mytr.x, mytr.y ) < 1000 ) {
 				if( dx > tol )
-					myci.left = true;
+					myci.xaxis = -1;
 				else if( dx < -tol )
-					myci.right = true;
+					myci.xaxis = 1;
 
 				if( dy > tol )
-					myci.down = true;
+					myci.yaxis = -1;
 				else if( dy < -tol )
-					myci.up = true;
+					myci.yaxis = 1;
 
 				if( (dy < 0 && dy > -40 - that.CBox[0].x) || (dy > 0 && dy < 40 ) )
 					that.CInputState.attack = true;
