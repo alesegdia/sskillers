@@ -37,6 +37,25 @@ Vec2.prototype = {
 	scaleXY : function( fx, fy ){
 		this.x *= fx;
 		this.y *= fy;
+	},
+
+	normalize : function() {
+		var mod = Math.sqrt( this.x * this.x + this.y * this.y );
+		this.x = this.x / mod;
+		this.y = this.y / mod;
+	},
+
+	clone : function() {
+		return new Vec2(this.x, this.y);
+	},
+
+	cap : function(x,y) {
+		if( Math.abs(this.x) > x ) this.x = x * sign(this.x);
+		if( Math.abs(this.y) > y ) this.y = y * sign(this.y);
+	},
+
+	mod : function() {
+		return Math.sqrt( this.x * this.x + this.y * this.y );
 	}
 
 };

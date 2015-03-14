@@ -134,7 +134,7 @@ SSK.game.entity.EnemyShip = function( px, py ){
 	this.CBox = [new Vec2(0,0), new Vec2( this.CRender.sprite.width, this.CRender.sprite.height )];
 	this.CVelocity = new Vec2( 0, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
-	this.CMaxVelocity = new Vec2( 500, 375 );
+	this.CMaxVelocity = new Vec2( 500, 500 );
 
 	this.CEnemy = true;
 
@@ -175,9 +175,38 @@ SSK.game.entity.EnemyShip = function( px, py ){
 	this.CKeyControl = true;
 	var mytr = this.CTransform;
 	var myci = this.CInputState;
+	var mycr = this.CRender;
 	this.CBehaviour = {
+		force : new Vec2(0,0),
+		maxforce : new Vec2(0.5,0.5),
 		action : function(pl) {
 
+			var pltr = pl.CTransform;
+			myci.reset();
+
+
+			var dx = mytr.x - pltr.x;
+			var dy = mytr.y - pltr.y;
+
+			var tol = 10;
+			if( distance( pltr.x, pltr.y, mytr.x, mytr.y ) < 1000 ) {
+				if( (dy < 0 && dy > -40 - that.CBox[0].x) || (dy > 0 && dy < 40 ) )
+					that.CInputState.attack = true;
+
+			}
+
+			mycr.faceLeft = dx > 0;
+				var vectoplayer = pltr.clone();
+				vectoplayer.sub( mytr );
+				var v2pmod = vectoplayer.mod();
+				vectoplayer.normalize();
+
+				this.force.add(vectoplayer);
+				this.force.cap(this.maxforce.x, this.maxforce.y);
+
+				myci.xaxis += this.force.x / 100;
+				myci.yaxis += this.force.y / 100;
+			/*
 			var pltr = pl.CTransform;
 			myci.reset();
 
@@ -200,12 +229,8 @@ SSK.game.entity.EnemyShip = function( px, py ){
 				if( (dy < 0 && dy > -40 - that.CBox[0].x) || (dy > 0 && dy < 40 ) )
 					that.CInputState.attack = true;
 
-				/*
-				if( mytr.x - pltr.y < 0 ){
-					myci.up = true;
-				}
-				*/
 			}
+			*/
 
 		}
 	};

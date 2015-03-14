@@ -42,14 +42,17 @@ SSK.module.KeyboardController.prototype = {
 			}
 		}
 
+		if( e.CPlayer )
+		{
 		if(e.CInputState.xaxis < 0 ){
-			e.CVelocity.x = -e.CMaxVelocity.x;
+			//e.CVelocity.x = -e.CMaxVelocity.x;
 			if( e.CInputState.shift == true )
 				e.CRender.faceLeft = true;
 		} else if (e.CInputState.xaxis > 0 ){
-			e.CVelocity.x = e.CMaxVelocity.x;
+			//e.CVelocity.x = e.CMaxVelocity.x;
 			if( e.CInputState.shift == true )
 				e.CRender.faceLeft = false;
+		}
 		}
 
 		if( e.CInputState.q == true )
