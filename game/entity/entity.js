@@ -4,9 +4,32 @@
 
 SSK.namespace("SSK.game.entity");
 
+function parseJSONrect(file)
+{
+	var tmp;
+	$.ajax({
+		url: file,
+		async: false,
+		success: function(data) {
+			tmp = data;
+		}
+	});
+	var ret = [];
+	for( var i = 0; i < tmp.length; i++ )
+	{
+		var obj = new Vec2(tmp[i][0][0], tmp[i][0][1]);
+		ret.push(obj);
+		var obj = new Vec2(tmp[i][1][0], tmp[i][1][1]);
+		ret.push(obj);
+	}
+	return ret;
+}
+
+var astraboxes = parseJSONrect('./astraslicer.json');
+
 SSK.game.entity.Camera = function( ){
 	this.CTransform = new Vec2( 1000, 1000 );
-	this.CBox = new Vec2( 0, 0 );
+	this.CBox = [new Vec2( 0, 0 ), new Vec2( 0, 0 )];
 	this.CCamera = true;
 	this.CSpeedFactor = new Vec2( 50, 50 );
 	this.CVelocity = new Vec2( 0, 0 );
@@ -23,7 +46,7 @@ SSK.game.entity.PlayerShip = function( ){
 
 	this.CAlive = true;
 	this.CTransform = new Vec2( 100, 100 );
-	this.CBox = new Vec2( 20, 20 );
+	this.CBox = [new Vec2(0,0), new Vec2( 20, 20 )];
 	this.CVelocity = new Vec2( 0, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
 	this.CMaxVelocity = new Vec2( 3000, 2250 );
@@ -92,7 +115,7 @@ SSK.game.entity.Powerup = function( px, py, spr )
 		sprite : spr
 	};
 	this.CTransform = new Vec2( px, py );
-	this.CBox = new Vec2( this.CRender.sprite.width, this.CRender.sprite.height );
+	this.CBox = [new Vec2(0,0), new Vec2( this.CRender.sprite.width, this.CRender.sprite.height )];
 }
 
 SSK.game.entity.EnemyShip = function( px, py ){
@@ -106,7 +129,7 @@ SSK.game.entity.EnemyShip = function( px, py ){
 	this.CMaxHealth = 10;
 	this.CHealth = 10;
 	this.CTransform = new Vec2( px, py );
-	this.CBox = new Vec2( this.CRender.sprite.width, this.CRender.sprite.height );
+	this.CBox = [new Vec2(0,0), new Vec2( this.CRender.sprite.width, this.CRender.sprite.height )];
 	this.CVelocity = new Vec2( 0, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
 	this.CMaxVelocity = new Vec2( 500, 375 );
@@ -174,7 +197,7 @@ SSK.game.entity.EnemyShip = function( px, py ){
 				else if( dy < -tol )
 					myci.up = true;
 
-				if( (dy < 0 && dy > -40 - that.CBox.x) || (dy > 0 && dy < 40 ) )
+				if( (dy < 0 && dy > -40 - that.CBox[0].x) || (dy > 0 && dy < 40 ) )
 					that.CInputState.attack = true;
 
 				/*
@@ -194,7 +217,7 @@ SSK.game.entity.EnemyShip = function( px, py ){
 SSK.game.entity.EnemyGenerator = function( px, py ){
 
 	this.CRender = {
-		faceLeft : true,
+		faceLeft : false,
 		sprite : SSK.game.gfx.SpriteCache.SP_GEN
 	};
 
@@ -217,7 +240,7 @@ SSK.game.entity.EnemyGenerator = function( px, py ){
 
 	this.CEnemy = true;
 	this.CTransform = new Vec2( px, py );
-	this.CBox = new Vec2( this.CRender.sprite.width, this.CRender.sprite.height );
+	this.CBox = astraboxes.slice(0); //[ new Vec2( this.CRender.sprite.width, this.CRender.sprite.height ) ];
 	var that = this;
 	this.CBehaviour = {
 		next_spawn : 0,
@@ -252,7 +275,7 @@ SSK.game.entity.Bullet = function( px, py, enemyBullet, pow ){
 
 	this.CAlive = true;
 	this.CTransform = new Vec2( px, py );
-	this.CBox = new Vec2( this.CRender.sprite.width, this.CRender.sprite.height );
+	this.CBox = [ new Vec2( 0, 0 ), new Vec2( this.CRender.sprite.width, this.CRender.sprite.height ) ];
 	this.CVelocity = new Vec2( 80, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
 

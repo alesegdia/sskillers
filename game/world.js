@@ -119,9 +119,30 @@ SSK.game.WorldObj.prototype = {
 		elist.each( function(e1){
 			elist.each( function(e2){
 				if( e1 !== e2 && e1.CCollision && e2.CCollision ) {
-						if( rectIntersect( e1.CTransform, e1.CBox,
-							e2.CTransform, e2.CBox ) == true )
-							e1.CCollision.handle( e2 );
+					var collide = false;
+					var i,j;
+					var v1, v2;
+					v1 = new Vec2(0,0);
+					v2 = new Vec2(0,0);
+					for( i = 0; i < e1.CBox.length; i+=2 )
+					{
+						if( collide ) break;
+						for( j = 0; j < e2.CBox.length; j+=2 )
+						{
+							if( collide ) break;
+							v1.set(e1.CTransform.x, e1.CTransform.y);
+							v1.add(e1.CBox[i]);
+							v2.set(e2.CTransform.x, e2.CTransform.y);
+							v2.add(e2.CBox[j]);
+							if( rectIntersect( v1, e1.CBox[i+1],
+								v2, e2.CBox[j+1] ) == true )
+							{
+								collide = true;
+							}
+						}
+					}
+
+					if( collide ) e1.CCollision.handle( e2 );
 				}
 			});});
 
