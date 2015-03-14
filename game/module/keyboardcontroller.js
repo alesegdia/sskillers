@@ -44,28 +44,17 @@ SSK.module.KeyboardController.prototype = {
 
 		if( e.CPlayer )
 		{
-		if(e.CInputState.xaxis < 0 ){
-			//e.CVelocity.x = -e.CMaxVelocity.x;
-			if( e.CInputState.shift == true )
-				e.CRender.faceLeft = true;
-		} else if (e.CInputState.xaxis > 0 ){
-			//e.CVelocity.x = e.CMaxVelocity.x;
-			if( e.CInputState.shift == true )
-				e.CRender.faceLeft = false;
-		}
-		}
-
-		if( e.CInputState.q == true )
-		{
-			e.CRender.faceLeft = true;
-		}
-		else if( e.CInputState.w == true )
-		{
-			e.CRender.faceLeft = false;
+			if(e.CInputState.xaxis < 0 ){
+				//e.CVelocity.x = -e.CMaxVelocity.x;
+				if( e.CInputState.shift == true )
+					e.CRender.faceLeft = true;
+			} else if (e.CInputState.xaxis > 0 ){
+				//e.CVelocity.x = e.CMaxVelocity.x;
+				if( e.CInputState.shift == true )
+					e.CRender.faceLeft = false;
+			}
 		}
 
-		e.CVelocity.x *= SSK.core.deltaTime;
-		e.CVelocity.y *= SSK.core.deltaTime;
 	},
 
 	performsOver : function(e) {

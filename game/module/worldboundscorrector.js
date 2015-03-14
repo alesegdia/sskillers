@@ -50,7 +50,7 @@ SSK.module.WorldBoundsCorrector.prototype = {
 	},
 
 	performsOver : function( e ){
-		return e.CTransform;
+		return e.CPlayer || e.CCamera;
 		//return e.CCamera || e.CPlayer;
 	}
 };

@@ -31,7 +31,7 @@ SSK.game.entity.Camera = function( ){
 	this.CTransform = new Vec2( 1000, 1000 );
 	this.CBox = [new Vec2( 0, 0 ), new Vec2( 0, 0 )];
 	this.CCamera = true;
-	this.CSpeedFactor = new Vec2( 50, 50 );
+	this.CSpeedFactor = new Vec2( 1000, 1000 );
 	this.CVelocity = new Vec2( 0, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
 	this.CAlive = true;
@@ -49,7 +49,7 @@ SSK.game.entity.PlayerShip = function( ){
 	this.CBox = [new Vec2(0,0), new Vec2( 20, 20 )];
 	this.CVelocity = new Vec2( 0, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
-	this.CMaxVelocity = new Vec2( 3000, 2250 );
+	this.CMaxVelocity = new Vec2( 300, 225 );
 	this.CGauge = 4;
 
 	this.CHealth = 15;
@@ -134,7 +134,6 @@ SSK.game.entity.EnemyShip = function( px, py ){
 	this.CBox = [new Vec2(0,0), new Vec2( this.CRender.sprite.width, this.CRender.sprite.height )];
 	this.CVelocity = new Vec2( 0, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
-	this.CMaxVelocity = new Vec2( 500, 500 );
 
 	this.CEnemy = true;
 
@@ -172,40 +171,54 @@ SSK.game.entity.EnemyShip = function( px, py ){
 	};
 
 
+	this.CMaxVelocity = new Vec2( 1000, 1000 );
 	this.CKeyControl = true;
 	var mytr = this.CTransform;
 	var myci = this.CInputState;
 	var mycr = this.CRender;
 	this.CBehaviour = {
 		force : new Vec2(0,0),
-		maxforce : new Vec2(0.5,0.5),
+		maxforce : new Vec2(50,50),
 		action : function(pl) {
 
 			var pltr = pl.CTransform;
-			myci.reset();
+			if( distance( pltr.x, pltr.y, mytr.x, mytr.y ) < 1000 )
+			{
+				myci.reset();
 
+				var dx = mytr.x - pltr.x;
+				var dy = mytr.y - pltr.y;
 
-			var dx = mytr.x - pltr.x;
-			var dy = mytr.y - pltr.y;
-
-			var tol = 10;
-			if( distance( pltr.x, pltr.y, mytr.x, mytr.y ) < 1000 ) {
-				if( (dy < 0 && dy > -40 - that.CBox[0].x) || (dy > 0 && dy < 40 ) )
-					that.CInputState.attack = true;
-
-			}
-
-			mycr.faceLeft = dx > 0;
+				mycr.faceLeft = dx > 0;
 				var vectoplayer = pltr.clone();
 				vectoplayer.sub( mytr );
 				var v2pmod = vectoplayer.mod();
 				vectoplayer.normalize();
 
-				this.force.add(vectoplayer);
+				if( Math.abs(dy) < 30 && Math.abs(dx) < 400 ) {
+					this.force.y *= 0.97;
+					this.force.x *= 0.97;
+				}
+				else
+				{
+				this.force.y += 0.5 * vectoplayer.y;
+				this.force.x += 0.5 * vectoplayer.x;
+				}
+
+				//this.force.add(vectoplayer);
 				this.force.cap(this.maxforce.x, this.maxforce.y);
 
-				myci.xaxis += this.force.x / 100;
-				myci.yaxis += this.force.y / 100;
+				myci.xaxis = this.force.x / 100;
+				myci.yaxis = this.force.y / 100;
+
+				var tol = 10;
+				if( distance( pltr.x, pltr.y, mytr.x, mytr.y ) < 1000 ) {
+					if( (dy < 0 && dy > -40 - that.CBox[0].x) || (dy > 0 && dy < 40 ) )
+						that.CInputState.attack = true;
+
+				}
+			}
+
 			/*
 			var pltr = pl.CTransform;
 			myci.reset();
@@ -301,7 +314,7 @@ SSK.game.entity.Bullet = function( px, py, enemyBullet, pow ){
 	this.CAlive = true;
 	this.CTransform = new Vec2( px, py );
 	this.CBox = [ new Vec2( 0, 0 ), new Vec2( this.CRender.sprite.width, this.CRender.sprite.height ) ];
-	this.CVelocity = new Vec2( 80, 0 );
+	this.CVelocity = new Vec2( 800, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
 
 	this.CBullet = {
