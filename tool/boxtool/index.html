@@ -115,11 +115,10 @@ var toolset = {
 		},
 		"mouseUpListener" : function(x,y) {
 			console.log(x, y);
-			if( current_rect_topleft[0] < x && current_rect_topleft[1] < y )
-			{
-				current_rect_size = [x-current_rect_topleft[0],y-current_rect_topleft[1]];
-				rectdata.push([current_rect_topleft, current_rect_size]);
-			}
+			var min = [ Math.min(current_rect_topleft[0], x), Math.min(current_rect_topleft[1], y) ];
+			var max = [ Math.max(current_rect_topleft[0], x), Math.max(current_rect_topleft[1], y) ];
+			current_rect_size = [max[0] - min[0], max[1] - min[1]];
+			rectdata.push([min, current_rect_size]);
 			current_rect_topleft = null;
 			tmp = null;
 		},
@@ -154,6 +153,7 @@ var mouseEventListenerFactory = function( listener_string )
 	return function(event) {
 		var x = event.x;
 		var y = event.y;
+		console.log(x,y);
 		var canvas = document.getElementById("imageCanvas");
 		x -= canvas.offsetLeft;
 		y -= canvas.offsetTop;
@@ -210,7 +210,7 @@ var render = function()
 
 var saveJsonToFile = function()
 {
-	var url = 'data:text/json;charset=utf8,' + encodeURIComponent(JSON.stringify(rectdata));
+	var url = 'data:text/json;charset=utf8,' + encodeURIComponent(JSON.stringify({ "rects" : rectdata, "named_points" : named_points }));
 	window.open(url, '_blank');
 	window.focus();
 }
