@@ -131,10 +131,6 @@ SSK.game.WorldObj.prototype = {
 		});});
 
 
-		// CLEAR DEAD ENTITIES
-		this.entitylist.delete_if( function(entity){
-			return entity.CAlive == false;
-		});
 
 		var j, x, y, inRange, margin, modules;
 		var entitylist
@@ -151,6 +147,10 @@ SSK.game.WorldObj.prototype = {
 			}
 		});
 
+		// CLEAR DEAD ENTITIES
+		this.entitylist.delete_if( function(entity){
+			return entity.CAlive == false;
+		});
 
 
 		if ( this.player.CHealth <= 0 && ok == false ){
