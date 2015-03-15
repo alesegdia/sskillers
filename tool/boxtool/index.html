@@ -1,18 +1,63 @@
 
 
 <body>
-<label>Image File:</label><br/>
-<input type="file" id="imageLoader" name="imageLoader"/><br />
-<br />
-<label>JSON file:</label><br/>
-<input type="file" id="jsonLoader" name="jsonLoader"/>
-<br />
-<br />
-<canvas id="imageCanvas"></canvas>
-<button onclick="savetofile()">save!</button>
+<script type="application/javascript" src="../../game/jquery-2.1.3.min.js"></script>
 
+<div class="row">
+	<div class="col-md-row-6 col-md-offset-6">
+		<label>Image File:</label><br/>
+		<input type="file" id="imageLoader" name="imageLoader"/><br />
+		<br />
+		<label>JSON file:</label><br/>
+		<input type="file" id="jsonLoader" name="jsonLoader"/>
+		<br />
+		<br />
+		<canvas id="imageCanvas"></canvas>
+		<br />
 
+		<select id="tool-selector" onchange="changeTool();">
+			<option selected value="boxedit">BoxEdit</option>
+			<option value="pointnamer">PointNamer</option>
+		</select>
+
+		<br />
+
+		<select id="point-selector" onchange="selectPoint();">
+		</select>
+		<br />
+
+		<input type="text" id="point-name" onchange="pointNameChanged();" />
+		<br />
+
+		<button onclick="saveJsonToFile()">Save data to JSON!</button>
+		<br />
+
+	</div>
+</div>
 <script type="application/javascript">
+
+var current_tool;
+
+var changeTool = function( )
+{
+	current_tool = $("#tool-selector").val();
+	console.log(current_tool);
+};
+
+var selected_point_index = null;
+var selectPoint = function() {
+	selected_point_index = $("#point-selector").val();
+	console.log(selected_point_index);
+	console.log("bleh");
+	$("#point-name").val(named_points[selected_point_index].name);
+}
+var pointNameChanged = function()
+{
+	var point = named_points[selected_point_index];
+	point.name = $("#point-name").val();
+	$('#point-selector>option:selected').text(point.name + " (" + point.data[0] + "," + point.data[1] + ")");
+}
+changeTool();
 
 requestAnimFrame = (function() {
   return window.requestAnimationFrame ||
@@ -58,54 +103,71 @@ function handleJson(e){
 	reader.readAsDataURL(e.target.files[0]);
 }
 
-
-
-var p1, p2, rectdata = [];
 var tmp;
-canvas.addEventListener("mousedown", function(event) {
-	var x = event.x;
-	var y = event.y;
-	var canvas = document.getElementById("imageCanvas");
-	x -= canvas.offsetLeft;
-	y -= canvas.offsetTop;
-	console.log(x, y);
-	p1 = [x,y];
-	tmp = [0,0];
-}, false);
+var current_rect_topleft, current_rect_size, rectdata = [];
+var named_points = [];
+var toolset = {
+	"boxedit" : {
+		"mouseDownListener" : function(x,y) {
+			console.log(x, y);
+			current_rect_topleft = [x,y];
+			tmp = [0,0];
+		},
+		"mouseUpListener" : function(x,y) {
+			console.log(x, y);
+			if( current_rect_topleft[0] < x && current_rect_topleft[1] < y )
+			{
+				current_rect_size = [x-current_rect_topleft[0],y-current_rect_topleft[1]];
+				rectdata.push([current_rect_topleft, current_rect_size]);
+			}
+			current_rect_topleft = null;
+			tmp = null;
+		},
+		"mouseMoveListener" : function(x,y) {
+			if( tmp != null )
+			{
+				tmp[0] = x - current_rect_topleft[0];
+				tmp[1] = y - current_rect_topleft[1];
+			}
+		}
+	},
+	"pointnamer" : {
+		"mouseDownListener" : function(x,y) {
+			console.log("DOWN!");
+			named_points.push({
+				data : [x,y],
+				name : "point" + named_points.length
+			});
+			console.log(named_points.length);
+			var point_num = named_points.length - 1;
+			var is_selected = named_points.length == 0 ? "selected" : "";
+			$("#point-selector").append("<option " + is_selected + " value='" + point_num + "'>" + named_points[point_num].name + " (" + named_points[point_num].data[0] + "," + named_points[point_num].data[1] + ")</option>");
+			selectPoint();
+		},
+		"mouseUpListener" : function(x,y) { },
+		"mouseMoveListener" : function(x,y) { }
+	}
+};
 
-
-canvas.addEventListener("mouseup", function(event) {
-	var x = event.x;
-	var y = event.y;
-	var canvas = document.getElementById("imageCanvas");
-	x -= canvas.offsetLeft;
-	y -= canvas.offsetTop;
-	console.log(x, y);
-	p2 = [x-p1[0],y-p1[1]];
-	rectdata.push([p1, p2]);
-	p1 = null;
-	tmp = null;
-}, false);
-
-canvas.addEventListener("mousemove", function(event) {
-	if( tmp != null )
-	{
+var mouseEventListenerFactory = function( listener_string )
+{
+	return function(event) {
 		var x = event.x;
 		var y = event.y;
 		var canvas = document.getElementById("imageCanvas");
 		x -= canvas.offsetLeft;
 		y -= canvas.offsetTop;
-		console.log("movin");
-		tmp[0] = x - p1[0];
-		tmp[1] = y - p1[1];
-		console.log(tmp);
-	}
-}, false);
+		toolset[current_tool][listener_string](x,y);
+	};
+}
 
+canvas.addEventListener("mousedown", mouseEventListenerFactory("mouseDownListener"), false);
+canvas.addEventListener("mouseup", mouseEventListenerFactory("mouseUpListener"), false);
+canvas.addEventListener("mousemove", mouseEventListenerFactory("mouseMoveListener"), false);
 
 var render = function()
 {
-	ctx.fillStyle = "rgb(255,0,0)";
+	ctx.fillStyle = "rgb(255,200,200)";
 	ctx.strokeWidth = 10;
 	ctx.fillRect(0,0,canvas.width, canvas.height);
 	ctx.strokeStyle = "rgb(0,0,255)";
@@ -119,17 +181,34 @@ var render = function()
 		ctx.strokeRect(r[0][0], r[0][1], r[1][0], r[1][1]);
 	}
 
-	if( p1 != null )
+	if( current_rect_topleft != null )
 	{
 		ctx.strokeStyle = "rgba(0,0,255,255)";
-		ctx.strokeRect(p1[0], p1[1], tmp[0], tmp[1]);
-		ctx.strokeRect(p1[0], p1[1], tmp[0], tmp[1]);
-		ctx.strokeRect(p1[0], p1[1], tmp[0], tmp[1]);
+		ctx.strokeRect(current_rect_topleft[0], current_rect_topleft[1], tmp[0], tmp[1]);
+		ctx.strokeRect(current_rect_topleft[0], current_rect_topleft[1], tmp[0], tmp[1]);
+		ctx.strokeRect(current_rect_topleft[0], current_rect_topleft[1], tmp[0], tmp[1]);
 	}
+
+	for( var i = 0; i < named_points.length; i++ )
+	{
+		ctx.fillStyle = "rgba(0,127,0,255)";
+		var point = named_points[i];
+		ctx.fillRect(point.data[0]-4, point.data[1]-4,8,8);
+		ctx.fillText(point.name, point.data[0]+8, point.data[1]+4);
+	}
+
+	if( selected_point_index != null )
+	{
+		ctx.fillStyle = "rgb(255,0,255)";
+		var point = named_points[selected_point_index];
+		ctx.fillRect(point.data[0]-4, point.data[1]-4,8,8);
+		ctx.fillText(point.name, point.data[0]+8, point.data[1]+4);
+	}
+
 	requestAnimFrame(render);
 }
 
-var savetofile = function()
+var saveJsonToFile = function()
 {
 	var url = 'data:text/json;charset=utf8,' + encodeURIComponent(JSON.stringify(rectdata));
 	window.open(url, '_blank');
