@@ -110,11 +110,13 @@ SSK.game.entity.PlayerShip = function( ){
 
 };
 
-SSK.game.entity.Powerup = function( px, py, spr )
+
+SSK.game.entity.Pickup = function( px, py, spr, type )
 {
 	this.CRender = {
 		faceLeft : true,
-		sprite : spr
+		sprite : spr,
+		rect : SSK.game.gfx.SpritesheetCache.SH_ITEMS.getRect( 0 )
 	};
 	this.CTransform = new Vec2( px, py );
 	this.CBox = [new Vec2(0,0), new Vec2( this.CRender.sprite.width, this.CRender.sprite.height )];

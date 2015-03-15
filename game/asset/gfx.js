@@ -1,4 +1,5 @@
 SSK.namespace("SSK.game.gfx");
+SSK.namespace("SSK.core.render");
 
 SSK.game.gfx.SpriteCache = {};
 
@@ -85,4 +86,14 @@ SSK.game.gfx.SpriteCache.SP_SLIDE5.src = "../media/img/slide5.png";
 
 SSK.game.gfx.SpriteCache.SP_SLIDE6 = new Image();
 SSK.game.gfx.SpriteCache.SP_SLIDE6.src = "../media/img/slide6.png";
+
+SSK.game.gfx.SpriteCache.SP_ITEMS = new Image();
+SSK.game.gfx.SpriteCache.SP_ITEMS.src = "../media/img/items.png";
+
+SSK.game.gfx.SpritesheetCache = {};
+var spcache = SSK.game.gfx.SpriteCache;
+var shtcache = SSK.game.gfx.SpritesheetCache;
+
+shtcache.SH_ITEMS = SSK.core.render.Spritesheet( spcache.SP_ITEMS, 2, 2 );
+
 
