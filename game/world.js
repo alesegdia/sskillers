@@ -99,22 +99,6 @@ SSK.game.WorldObj.prototype = {
 		if( this.shake <= 0 ) this.shake = 0;
 		else if( this.shake >= this.shakemax ) this.shake = this.shakemax;
 
-		var j, x, y, inRange, margin, modules;
-		var entitylist
-		modules = this.modulelist;
-		entitynum = 0;
-		this.entitylist.each( function(entity){
-			entitynum++;
-			for( j = 0; j < modules.length; j++ )
-			{
-				if( modules[j].performsOver( entity ) )
-				{
-					modules[j].tick( entity );
-				}
-			}
-		});
-
-
 		var elist = this.entitylist;
 		elist.each( function(e1){
 			elist.each( function(e2){
@@ -144,13 +128,30 @@ SSK.game.WorldObj.prototype = {
 
 					if( collide ) e1.CCollision.handle( e2 );
 				}
-			});});
+		});});
 
 
 		// CLEAR DEAD ENTITIES
 		this.entitylist.delete_if( function(entity){
 			return entity.CAlive == false;
 		});
+
+		var j, x, y, inRange, margin, modules;
+		var entitylist
+		modules = this.modulelist;
+		entitynum = 0;
+		this.entitylist.each( function(entity){
+			entitynum++;
+			for( j = 0; j < modules.length; j++ )
+			{
+				if( modules[j].performsOver( entity ) )
+				{
+					modules[j].tick( entity );
+				}
+			}
+		});
+
+
 
 		if ( this.player.CHealth <= 0 && ok == false ){
 			ok = true;
