@@ -36,6 +36,14 @@
 </div>
 <script type="application/javascript">
 
+var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+    // At least Safari 3+: "[object HTMLElementConstructor]"
+var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
+var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
+
 var current_tool;
 
 var changeTool = function( )
@@ -151,8 +159,18 @@ var toolset = {
 var mouseEventListenerFactory = function( listener_string )
 {
 	return function(event) {
-		var x = event.x;
-		var y = event.y;
+		var x,y;
+		if( isChrome )
+		{
+			x = event.x;
+			y = event.y;
+		}
+		else if( isFirefox )
+		{
+			x = event.clientX;
+			y = event.clientY;
+		}
+		console.log(event);
 		console.log(x,y);
 		var canvas = document.getElementById("imageCanvas");
 		x -= canvas.offsetLeft;
