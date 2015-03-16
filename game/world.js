@@ -133,18 +133,15 @@ SSK.game.WorldObj.prototype = {
 
 
 		var j, x, y, inRange, margin, modules;
-		var entitylist
-		modules = this.modulelist;
+		var entities = this.entitylist;
 		entitynum = 0;
-		this.entitylist.each( function(entity){
+		this.modulelist.forEach( function(module) {
 			entitynum++;
-			for( j = 0; j < modules.length; j++ )
-			{
-				if( modules[j].performsOver( entity ) )
-				{
-					modules[j].tick( entity );
+			entities.each( function(entity) {
+				if( module.performsOver(entity) ) {
+					module.tick(entity);
 				}
-			}
+			});
 		});
 
 		// CLEAR DEAD ENTITIES
