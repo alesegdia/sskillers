@@ -93,12 +93,8 @@ SSK.game.WorldObj.prototype = {
 		});
 	},
 
-	tick : function()
+	checkCollisions : function()
 	{
-		this.shake -= this.shakedecay * SSK.core.deltaTime;
-		if( this.shake <= 0 ) this.shake = 0;
-		else if( this.shake >= this.shakemax ) this.shake = this.shakemax;
-
 		var elist = this.entitylist;
 		elist.each( function(e1){
 			elist.each( function(e2){
@@ -129,9 +125,10 @@ SSK.game.WorldObj.prototype = {
 					if( collide ) e1.CCollision.handle( e2 );
 				}
 		});});
+	},
 
-
-
+	tickECS : function()
+	{
 		var j, x, y, inRange, margin, modules;
 		var entities = this.entitylist;
 		entitynum = 0;
@@ -143,6 +140,17 @@ SSK.game.WorldObj.prototype = {
 				}
 			});
 		});
+	},
+
+	tick : function()
+	{
+		this.shake -= this.shakedecay * SSK.core.deltaTime;
+		if( this.shake <= 0 ) this.shake = 0;
+		else if( this.shake >= this.shakemax ) this.shake = this.shakemax;
+
+		this.checkCollisions();
+
+		this.tickECS();
 
 		// CLEAR DEAD ENTITIES
 		this.entitylist.delete_if( function(entity){
@@ -223,7 +231,9 @@ SSK.game.WorldObj.prototype = {
 		//if( !this.player.CInputState.shift && this.player.CVelocity.x != 0 )
 		//	this.player.CRender.lookLeft = this.player.CVelocity.x < 0;
 
-		margin=20;
+		var j, x, y, inRange, margin, modules;
+		var entities = this.entitylist;
+		margin=0;
 		rend = this.renderer;
 		camera = this.cam;
 		this.entitylist.each( function(entity){
