@@ -15,6 +15,9 @@ SSK.game.gfx.SpriteCache.SP_ARMORBAR_.src = "../media/img/armorbar_.png";
 SSK.game.gfx.SpriteCache.SP_BULLET = new Image();
 SSK.game.gfx.SpriteCache.SP_BULLET.src = "../media/img/bullet.png";
 
+SSK.game.gfx.SpriteCache.SP_EBULLET = new Image();
+SSK.game.gfx.SpriteCache.SP_EBULLET.src = "../media/img/enemy_bullet.png";
+
 SSK.game.gfx.SpriteCache.SP_CREDITS_0 = new Image();
 SSK.game.gfx.SpriteCache.SP_CREDITS_0.src = "../media/img/credits-0.png";
 
@@ -94,6 +97,6 @@ SSK.game.gfx.SpritesheetCache = {};
 var spcache = SSK.game.gfx.SpriteCache;
 var shtcache = SSK.game.gfx.SpritesheetCache;
 
-shtcache.SH_ITEMS = SSK.core.render.Spritesheet( spcache.SP_ITEMS, 2, 2 );
+//shtcache.SH_ITEMS = SSK.core.render.Spritesheet( spcache.SP_ITEMS, 2, 2 );
 
 

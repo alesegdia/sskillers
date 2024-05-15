@@ -1,5 +1,5 @@
 var Star = function( maxw, maxh ) {
-	this.spmult = 0.25;
+	this.spmult = 0.05;
 	this.x = parseFloat( randomRange( 0, maxw - 1 ));
 	this.y = parseFloat( randomRange( 0, maxh - 1 ));
 	var spd = randomRange( 1, 3 ) * this.spmult;

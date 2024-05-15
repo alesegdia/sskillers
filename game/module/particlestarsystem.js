@@ -14,7 +14,7 @@ SSK.module.ParticleStarSystem.prototype = {
 	render : function( ctx ) {
 		for( var i = 0; i < this.stars.length - 1 ; i++ ){
 
-			var s = this.stars[i].speedX;
+			var s = this.stars[i].speedX * 4;
 			ctx.fillStyle="#FFFFFF";
 			ctx.fillRect(this.stars[i].x,this.stars[i].y,s*2,s*2);
 		}

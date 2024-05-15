@@ -42,6 +42,10 @@ function init(){
 	renderer = new SSK.module.Renderer( 1024, 600, usewebgl );
 	renderer.canvas2d.addEventListener( 'mousemove',
 			function( evt ){ SSK.input.updateMouse( renderer.canvas2d, evt ); }, false );
+
+
+	renderer.canvas2d.addEventListener('mousedown', SSK.input.mouseDown);
+	renderer.canvas2d.addEventListener('mouseup', SSK.input.mouseUp);
 	//world = new SSK.game.World( cam, player, renderer, levelsize.x, levelsize.y );
 	setInterval( run, 16 );
 	//SSK.screen.Manager.init( SSK.screen.GameplayScreen, renderer.context2d );

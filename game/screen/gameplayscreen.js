@@ -14,10 +14,13 @@ SSK.screen.GameplayScreen = {
 		bgmusic.play();
 		var player = new SSK.game.entity.PlayerShip();
 		var cam = new SSK.game.entity.Camera( );
+		cam.player = player;
+		player.cam = cam;
 		var scrolladjust = new SSK.module.ScrollAdjust( cam );
 		var levelsize = new Vec2( 2300, 2700 );
-		var keycontroller = new SSK.module.KeyboardController();
-		var camcontroller = new SSK.module.CamController( 300 );
+		var playerMouseFollow = new SSK.module.PlayerMouseFollow();
+		var velocityApplyModule = new SSK.module.VelocityApplyModule();
+		var camcontroller = new SSK.module.CamKeyboardController( 300 );
 		var worldcorrector = new SSK.module.WorldBoundsCorrector( levelsize.x, levelsize.y );
 		var motion = new SSK.module.Motion();
 		this.playerKeyEventListenerOn = SSK.input.keyEventListener( true, player );
@@ -28,7 +31,8 @@ SSK.screen.GameplayScreen = {
 		this.world = new SSK.game.WorldObj(
 				cam, player, renderer,
 				levelsize.x, levelsize.y );
-		this.world.addModule( keycontroller );
+		this.world.addModule( playerMouseFollow );
+		this.world.addModule( velocityApplyModule );
 		this.world.addModule( new SSK.module.AI() );
 		this.world.addModule( camcontroller );
 		this.world.addModule( motion );

@@ -1,7 +1,4 @@
 
-
-
-
 SSK.namespace("SSK.game.entity");
 
 function parseJSONrect(file)
@@ -31,10 +28,22 @@ SSK.game.entity.Camera = function( ){
 	this.CTransform = new Vec2( 1000, 1000 );
 	this.CBox = [new Vec2( 0, 0 ), new Vec2( 0, 0 )];
 	this.CCamera = true;
-	this.CSpeedFactor = new Vec2( 1000, 1000 );
+	this.CSpeedFactor = new Vec2( 500, 500 );
 	this.CVelocity = new Vec2( 0, 0 );
 	this.CSpeed = new Vec2( 0, 0 );
+	this.CMaxVelocity = new Vec2( 300, 300 );
 	this.CAlive = true;
+	this.CInputState = {
+		up : false,
+		down : false,
+		left : false,
+		right : false,
+		xaxis : 0,
+		yaxis : 0,
+		attack : false,
+		shift : false,
+		pause : false
+	};
 };
 
 SSK.game.entity.PlayerShip = function( ){
@@ -104,7 +113,7 @@ SSK.game.entity.PlayerShip = function( ){
 		xaxis : 0,
 		yaxis : 0,
 		attack : false,
-		shift : false,
+		shift : true,
 		pause : false
 	};
 
@@ -299,11 +308,17 @@ SSK.game.entity.EnemyGenerator = function( px, py ){
 };
 
 
-SSK.game.entity.Bullet = function( px, py, enemyBullet, pow ){
+SSK.game.entity.Bullet = function( px, py, enemyBullet, pow, bulletType ){
+
+	var sprite = SSK.game.gfx.SpriteCache.SP_BULLET;
+	if(bulletType == 0)
+	{
+		sprite = SSK.game.gfx.SpriteCache.SP_EBULLET;
+	}
 
 	this.CRender = {
 		faceLeft : false,
-		sprite : SSK.game.gfx.SpriteCache.SP_BULLET
+		sprite : sprite
 	};
 
 

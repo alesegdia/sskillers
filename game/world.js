@@ -18,13 +18,13 @@ SSK.game.WorldObj = function( cam, player, renderer, w, h ){
 	this.cam = cam;
 	this.cam.CBox.x = this.renderer.canvas2d.width;
 	this.cam.CBox.y = this.renderer.canvas2d.height;
-	this.rastro = new Rastro( this.player, 4, 0.15, 0.15 );
+	this.rastro = new Rastro( this.player, 10, 0.05, 0.025 );
 
 	this.particlestarsys = new SSK.module.ParticleStarSystem( 100,
 		renderer.canvas2d.width, renderer.canvas2d.height );
 	this.modulelist.push( this.particlestarsys );
 
-	// añadir desde aqui los modulos
+	// aï¿½adir desde aqui los modulos
 
 };
 
@@ -305,23 +305,6 @@ SSK.game.WorldObj.prototype = {
 
 		var h = this.renderer.canvas2d.height/2;
 
-		ctx.strokeStyle = "rgb(0,0,255)";
-		ctx.beginPath();
-		ctx.moveTo(this.renderer.canvas2d.width/2+ h * act.x, this.renderer.canvas2d.height/2 + h * act.y);
-		ctx.lineTo(this.renderer.canvas2d.width/2+ h * extra.x, this.renderer.canvas2d.height/2 + h * extra.y);
-		ctx.stroke();
-
-		ctx.strokeStyle = "rgb(0,255,0)";
-		ctx.beginPath();
-		ctx.moveTo(this.renderer.canvas2d.width/2+ h * inact.x, this.renderer.canvas2d.height/2 + h * inact.y);
-		ctx.lineTo(this.renderer.canvas2d.width/2+ h * act.x, this.renderer.canvas2d.height/2 + h * act.y);
-		ctx.stroke();
-
-		ctx.strokeStyle = "rgb(255,0,0)";
-		ctx.beginPath();
-		ctx.moveTo(this.renderer.canvas2d.width/2, this.renderer.canvas2d.height/2);
-		ctx.lineTo(this.renderer.canvas2d.width/2+ h * inact.x, this.renderer.canvas2d.height/2 + h * inact.y);
-		ctx.stroke();
 
 
 		ctx.restore();

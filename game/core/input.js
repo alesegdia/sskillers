@@ -30,6 +30,15 @@ SSK.input.updateMouse = function( canvas, evt ) {
 };
 
 
+SSK.input.mouseDown = function( canvas, evt ) {
+	SSK.input.mousePressed = true;
+};
+
+SSK.input.mouseUp = function( canvas, evt ) {
+	SSK.input.mousePressed = false;
+};
+
+
 
 SSK.input.keyEventListener = function( setval, player ){
 	return function (e) {
