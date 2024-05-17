@@ -1,10 +1,37 @@
 SSK.namespace("SSK.game.gfx");
 SSK.namespace("SSK.core.render");
 
+
+
+
+
+
+
+SSK.game.gfx.SpriteSheet = function(image, cols, rows)
+{
+    var sheet = {
+        cols: cols,
+        rows: rows,
+        image: image
+    };
+    return sheet;
+}
+
+SSK.game.gfx.Sprite = function(spriteSheet, currentCol, currentRow)
+{
+    var sprite = {
+        selected : { sheet : spriteSheet, x: currentCol, y: currentRow },
+    };
+    return sprite;
+}
+
 SSK.game.gfx.SpriteCache = {};
 
 SSK.game.gfx.SpriteCache.SP_AFORCE = new Image();
 SSK.game.gfx.SpriteCache.SP_AFORCE.src = "../media/img/aforce.png";
+
+SSK.game.gfx.SpriteCache.SP_OPTION = new Image();
+SSK.game.gfx.SpriteCache.SP_OPTION.src = "../media/img/option.png";
 
 SSK.game.gfx.SpriteCache.SP_ARMORBAR = new Image();
 SSK.game.gfx.SpriteCache.SP_ARMORBAR.src = "../media/img/armorbar.png";
@@ -16,7 +43,7 @@ SSK.game.gfx.SpriteCache.SP_BULLET = new Image();
 SSK.game.gfx.SpriteCache.SP_BULLET.src = "../media/img/bullet.png";
 
 SSK.game.gfx.SpriteCache.SP_EBULLET = new Image();
-SSK.game.gfx.SpriteCache.SP_EBULLET.src = "../media/img/enemy_bullet.png";
+SSK.game.gfx.SpriteCache.SP_EBULLET.src = "../media/img/bullet_enemy.png";
 
 SSK.game.gfx.SpriteCache.SP_CREDITS_0 = new Image();
 SSK.game.gfx.SpriteCache.SP_CREDITS_0.src = "../media/img/credits-0.png";

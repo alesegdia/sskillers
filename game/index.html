@@ -20,6 +20,7 @@
 <script type="application/javascript" src="rastro.js"></script>
 <script type="application/javascript" src="module/renderer.js"></script>
 <script type="application/javascript" src="module/Module.js"></script>
+<script type="application/javascript" src="module/OptionModule.js"></script>
 <script type="application/javascript" src="module/VelocityApplyModule.js"></script>
 <script type="application/javascript" src="module/PlayerMouseFollow.js"></script>
 <script type="application/javascript" src="module/CamKeyboardController.js"></script>
@@ -56,18 +57,28 @@ canvas {
     cursor: none;
 }
 
+body {
+    font-family: 'Courier New', Courier, monospace;
+}
+
 </style>
 
 
 <body>
 
 <div id="container"></div>
-<p><canvas id="canvas" width="1200" height="550" style="background:#999">
+<p><canvas id="canvas" width="1920" height="768" style="background:#999">
 Canvas not supported by your browser.
 </canvas></p>
 
 <div id="hey"></div>
 <div id="naves"></div>
+
+<center>
+    <h2>WASD: move hyperspeed</h2>
+    <h2>Mouse move: move DForce</h2>
+    <h2>LMB: shoot</h2>
+</center>
 </body>
 </html>
 

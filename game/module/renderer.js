@@ -23,12 +23,7 @@ SSK.module.Renderer = function( w, h, usewebgl2d ){
 SSK.module.Renderer.prototype = {
 
 	tick : function(e) {
-		//console.log("procesa");
-		this.context2d.save();
-		this.context2d.translate(10,0);
-		this.context2d.scale(-1,1);
-		//this.context2d.drawImage( e.CSprite, e.CTransform.x, e.CTransform.y );
-		this.context2d.restore();
+		
 	},
 
 	performsOver : function(e) {

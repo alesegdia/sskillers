@@ -1,5 +1,3 @@
-
-
 // MODULES
 var renderer = null;
 var world = null;
@@ -19,16 +17,6 @@ var usewebgl = getUrlVars()['usewebgl'] == "yes";
 console.log(getUrlVars()['usewebgl']);
 
 var currentScreen;
-//var gameplayScreen = new SSK.screen.GameplayScreen();
-
-//SSK.namespace("SSK.game");
-
-
-
-
-
-//document.body.appendChild( stats.domElement );
-//
 
 var stats;
 function init(){
@@ -42,13 +30,9 @@ function init(){
 	renderer = new SSK.module.Renderer( 1024, 600, usewebgl );
 	renderer.canvas2d.addEventListener( 'mousemove',
 			function( evt ){ SSK.input.updateMouse( renderer.canvas2d, evt ); }, false );
-
-
 	renderer.canvas2d.addEventListener('mousedown', SSK.input.mouseDown);
 	renderer.canvas2d.addEventListener('mouseup', SSK.input.mouseUp);
-	//world = new SSK.game.World( cam, player, renderer, levelsize.x, levelsize.y );
 	setInterval( run, 16 );
-	//SSK.screen.Manager.init( SSK.screen.GameplayScreen, renderer.context2d );
 	SSK.screen.Manager.init( SSK.screen.StoryScreen, renderer.context2d );
 }
 
@@ -64,20 +48,5 @@ function run(){
 	SSK.screen.Manager.tick();
 	SSK.screen.Manager.render();
 	stats.end();
-	//console.log("player pos: " + player.CTransform.x + "," + player.CTransform.y);
-
-/*
-	keycontroller.tick( player );
-	camcontroller.tick( cam );
-	starparticle.tick( cam ); // probablemente cam, y meter ahi esta velocidad!! coño, esta delante de mis narices xDDD hacer eso joder, asi mantenemos la estructura, y encima ayudamos la encapsulacion
-	motion.tick(player);
-	motion.tick(cam);
-	worldcorrector.tick( cam );
-
-	renderer.tick(player);
-*/
 }
-
-
-
 

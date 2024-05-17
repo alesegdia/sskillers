@@ -2,7 +2,7 @@
 
 SSK.namespace("SSK.module");
 
-SSK.module.ShieldSystem = function( ){
+SSK.module.ShieldSystem = function(){
 };
 
 SSK.module.ShieldSystem.prototype = {

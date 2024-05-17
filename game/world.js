@@ -24,6 +24,7 @@ SSK.game.WorldObj = function( cam, player, renderer, w, h ){
 		renderer.canvas2d.width, renderer.canvas2d.height );
 	this.modulelist.push( this.particlestarsys );
 
+
 	// a�adir desde aqui los modulos
 
 };
@@ -52,6 +53,10 @@ SSK.game.WorldObj.prototype = {
 	},
 
 	addEntity : function(e) {
+		if(e == '0')
+			{
+				debugger;
+			}
 		this.entitylist.add(e);
 		//this.entitylist.push(e);
 	},
@@ -78,6 +83,16 @@ SSK.game.WorldObj.prototype = {
 		context.fillRect(xs,ys,3,3);
 
 		this.entitylist.each( function(entity){
+
+			if(entity == null || entity.CTransform == null)
+				{
+					debugger;
+				}
+			if(entity.CTransform.x < 0 || entity.CTransform.y < 0 ||
+			   entity.CTransform.x > this.width || entity.CTransform.y > this.height )
+			{
+				return;
+			}
 			xs = entity.CTransform.x * factor + x;
 			ys = entity.CTransform.y * factor + y;
 			if( entity.CEnemy ) {
@@ -131,10 +146,10 @@ SSK.game.WorldObj.prototype = {
 	{
 		var j, x, y, inRange, margin, modules;
 		var entities = this.entitylist;
-		entitynum = 0;
 		this.modulelist.forEach( function(module) {
-			entitynum++;
+			entitynum = 0;
 			entities.each( function(entity) {
+				entitynum++;
 				if( module.performsOver(entity) ) {
 					module.tick(entity);
 				}
@@ -186,7 +201,7 @@ SSK.game.WorldObj.prototype = {
 		this.drawBar( SSK.game.gfx.SpriteCache.SP_SHIELDBAR, this.player.CShield.current, x + 78, y + 228 );
 
 		this.drawBar( SSK.game.gfx.SpriteCache.SP_GAUGEBAR, this.player.CGauge, x + 78, y + 288 );
-		this.drawMinimap( x + 75, y + 40, 0.05, this.renderer.context2d );
+		this.drawMinimap( x + 75, y + 40, 0.025, this.renderer.context2d );
 	},
 
 	render : function()
@@ -272,9 +287,6 @@ SSK.game.WorldObj.prototype = {
 
 		});
 
-		//this.globalAlpha = 1.0;
-		//
-		//this.renderer.context2d.fillStyle='#FFF';
 		this.drawGui( this.cam.CBox.x - SSK.game.gfx.SpriteCache.SP_GUI.width, 0 );
 
 		this.renderer.context2d.fillStyle='#FFF';

@@ -46,7 +46,63 @@ SSK.game.entity.Camera = function( ){
 	};
 };
 
+var makeParallelShot = function(sprite, rate, enemy, power, count)
+{
+	// type can be 'parallel' or 'spread'
+	return {
+		// COMMON ATTRS
+		rate : rate,
+		timer : 0,
+		enemy : enemy,
+		power : power,
+		sprite : sprite,
+
+		// PARALLEL ATTRS
+		type : "parallel",
+		count : count - 1
+	};
+}
+
+var makeSpreadShot = function(sprite, rate, enemy, power, angle, count)
+{
+	// type can be 'parallel' or 'spread'
+	return {
+		// COMMON ATTRS
+		rate  : rate,
+		timer : 0,
+		enemy : enemy,
+		power : power,
+		sprite : sprite,
+
+		// SPREAD ATTRS
+		type  : "spread",
+		angle : angle,
+		count : count,
+	};
+}
+
+SSK.game.entity.Option = function( player )
+{
+	player.COptionOwner.options.push(this);
+
+	this.CBulletShot = makeParallelShot(SSK.game.gfx.SpriteCache.SP_BULLET, 0.1, false, 1, 2);
+	this.CRender = {
+		faceLeft : player.CRender.faceLeft,
+		sprite : SSK.game.gfx.SpriteCache.SP_OPTION,
+	};
+	this.COption = { owner: player };
+	this.CInputState = { attack: true };
+
+	this.CTransform = { x: 0, y: 0 };
+}
+
+
 SSK.game.entity.PlayerShip = function( ){
+
+	this.COptionOwner = {
+		options: [],
+		delta: 0,
+	};
 
 	this.CRender = {
 		faceLeft : true,
@@ -87,7 +143,8 @@ SSK.game.entity.PlayerShip = function( ){
 					that.CShield.current = 0;
 				}
 
-				if( that.CHealth <= 0 ){
+				if( that.CHealth <= 0 )
+				{
 					that.CAlive = false;
 					SSK.screen.Manager.nextScreen = SSK.screen.MenuScreen;
 				}
@@ -97,14 +154,23 @@ SSK.game.entity.PlayerShip = function( ){
 	};
 
 	this.CPlayer = true;
-	this.CBulletShot = {
-		rate : 0.1,
-		timer : 0,
-		enemy : false,
-		power : 1
-	};
+	/*
+	this.CBulletShot = makeParallelShot(
+		SSK.game.gfx.SpriteCache.SP_BULLET,
+		0.1,
+		false,
+		1,
+		2);
+	*/
 
-	//this.CSprite.src = "../media/dforce_der.png";
+	this.CBulletShot = makeSpreadShot(
+		SSK.game.gfx.SpriteCache.SP_BULLET,
+		0.1,
+		false,
+		1,
+		30,
+		2);
+
 	this.CInputState = {
 		up : false,
 		down : false,
@@ -116,7 +182,6 @@ SSK.game.entity.PlayerShip = function( ){
 		shift : true,
 		pause : false
 	};
-
 };
 
 
@@ -164,8 +229,11 @@ SSK.game.entity.EnemyShip = function( px, py ){
 		handle : function(other){
 			that.CInputState.shift = true;
 			if( other.CBullet && other.CAlive && other.CBullet.enemy == false ){
+				if( that.CHealth - other.CBullet.power < 0)
+					{
+						// debugger;
+					}
 				that.CHealth -= other.CBullet.power;
-				// poner este check en un sistema
 				if( that.CHealth <= 0 ){
 					that.CAlive = false;
 				}
@@ -174,12 +242,12 @@ SSK.game.entity.EnemyShip = function( px, py ){
 		}
 	};
 
-	this.CBulletShot = {
-		rate : 0.5,
-		timer : 0,
-		enemy : true,
-		power : 1
-	};
+	this.CBulletShot = makeParallelShot(
+		SSK.game.gfx.SpriteCache.SP_EBULLET,
+		0.1,
+		true,
+		1,
+		3);
 
 
 	this.CMaxVelocity = new Vec2( 1000, 1000 );
@@ -229,33 +297,6 @@ SSK.game.entity.EnemyShip = function( px, py ){
 
 				}
 			}
-
-			/*
-			var pltr = pl.CTransform;
-			myci.reset();
-
-
-			var dx = mytr.x - pltr.x;
-			var dy = mytr.y - pltr.y;
-
-			var tol = 10;
-			if( distance( pltr.x, pltr.y, mytr.x, mytr.y ) < 1000 ) {
-				if( dx > tol )
-					myci.xaxis = -1;
-				else if( dx < -tol )
-					myci.xaxis = 1;
-
-				if( dy > tol )
-					myci.yaxis = -1;
-				else if( dy < -tol )
-					myci.yaxis = 1;
-
-				if( (dy < 0 && dy > -40 - that.CBox[0].x) || (dy > 0 && dy < 40 ) )
-					that.CInputState.attack = true;
-
-			}
-			*/
-
 		}
 	};
 
@@ -307,18 +348,28 @@ SSK.game.entity.EnemyGenerator = function( px, py ){
 
 };
 
+function rotateVector(x, y, angleInDegrees) {
+    // Convert the angle from degrees to radians
+    const angleInRadians = angleInDegrees * (Math.PI / 180);
 
-SSK.game.entity.Bullet = function( px, py, enemyBullet, pow, bulletType ){
+    // Calculate the cosine and sine of the angle
+    const cosTheta = Math.cos(angleInRadians);
+    const sinTheta = Math.sin(angleInRadians);
 
-	var sprite = SSK.game.gfx.SpriteCache.SP_BULLET;
-	if(bulletType == 0)
-	{
-		sprite = SSK.game.gfx.SpriteCache.SP_EBULLET;
-	}
+    // Apply the rotation matrix
+    const xPrime = x * cosTheta - y * sinTheta;
+    const yPrime = x * sinTheta + y * cosTheta;
+
+    // Return the rotated vector as an object
+    return { x: xPrime, y: yPrime };
+}
+
+
+SSK.game.entity.Bullet = function( bulletSprite, px, py, enemyBullet, pow, angle ){
 
 	this.CRender = {
 		faceLeft : false,
-		sprite : sprite
+		sprite : bulletSprite
 	};
 
 
@@ -331,7 +382,9 @@ SSK.game.entity.Bullet = function( px, py, enemyBullet, pow, bulletType ){
 	this.CAlive = true;
 	this.CTransform = new Vec2( px, py );
 	this.CBox = [ new Vec2( 0, 0 ), new Vec2( this.CRender.sprite.width, this.CRender.sprite.height ) ];
-	this.CVelocity = new Vec2( 800, 0 );
+
+	var v = rotateVector(800, 0, angle);
+	this.CVelocity = new Vec2( v.x, v.y );
 	this.CSpeed = new Vec2( 0, 0 );
 
 	this.CBullet = {
@@ -343,53 +396,4 @@ SSK.game.entity.Bullet = function( px, py, enemyBullet, pow, bulletType ){
 };
 
 
-
-
-/*
-SSK.game.entity.MovingBulletShip = function( px, py, pmaxX, pmaxY, health, spritesrc ){
-	this.CTransform = new Vec2( px, py );
-	this.CSprite = SSK.game.gfx.RequestCachedSprite( spritesrc );
-	this.CVelocity = {
-		x : 0, y : 0,
-		maxX : pmaxX, maxY: pmaxY
-	};
-	this.CHealth = health;
-	this.CBulletAttack = {
-		rate : 1.00,
-		bulletJump : 0,
-		bulletJumpTime : 0,
-		ref : {}
-	};
-	this.CInputState : {
-		up : false,
-		down : false,
-		left : false,
-		right : false,
-		attack : false,
-		shift : false,
-		pause : false
-	}
-
-};
-
-SSK.game.entity.Bullet = function( px, py, pxspeed, pyspeed, power, spritesrc ){
-	this.CTransform = new Vec2( px, py );
-	this.CVelocity = {
-		x : pxspeed, y : pyspeed,
-		maxX : pxspeed, maxY : pyspeed
-	};
-	this.CPower = power;
-	this.CSprite = SSK.game.gfx.RequestCachedSprite( spritesrc );
-};
-
-SSK.game.entity.Player.prototype = new MovingBulletShip();
-SSK.game.entity.Player.constructor = function( px, py, pmaxX, pmaxY, health, spritesrc ){
-	SSK.game.entity.MovingBulletShip.call( this, px, py, pmaxX, pmaxY, health, spritesrc );
-	this.CPlayer = true;
-};
-
-SSK.game.entity.EnemyShip.prototype = new MovingBulletShip();
-
-
-*/
 

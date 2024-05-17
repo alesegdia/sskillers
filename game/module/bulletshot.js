@@ -7,15 +7,50 @@ SSK.module.BulletShot.prototype = {
 
 	tick : function(e) {
 
+		var createBullet = function(offx, offy, angle)
+		{
+			var b = new SSK.game.entity.Bullet( e.CBulletShot.sprite, e.CTransform.x + offx, e.CTransform.y + offy, e.CBulletShot.enemy, e.CBulletShot.power, angle );
+			if( e.CRender.faceLeft == true ) b.CVelocity.x = -b.CVelocity.x;
+			if(b == '0')
+				{
+					debugger;
+				}
+			return b;
+		};
+
 		if( e.CInputState.attack && e.CBulletShot.timer > e.CBulletShot.rate )
 		{
-			var bullet1 = new SSK.game.entity.Bullet( e.CTransform.x, e.CTransform.y, e.CBulletShot.enemy, e.CBulletShot.power );
-			var bullet2 = new SSK.game.entity.Bullet( e.CTransform.x, e.CTransform.y - 1 + e.CRender.sprite.height, e.CBulletShot.enemy, e.CBulletShot.power );
-			if( e.CRender.faceLeft == true ) bullet1.CVelocity.x = -bullet1.CVelocity.x;
-			if( e.CRender.faceLeft == true ) bullet2.CVelocity.x = -bullet2.CVelocity.x;
-			SSK.game.World.addEntity( bullet1 );
-			SSK.game.World.addEntity( bullet2 );
+			var bullets = [];
+			if(e.CBulletShot.type == "parallel")
+			{
+				for(var i = 0; i <= e.CBulletShot.count; i++)
+				{
+					bullets.push(
+						createBullet(e.CRender.sprite.width / 2,
+						(e.CRender.sprite.height/e.CBulletShot.count) * i,
+						0));
+				}
+			}
+			else if(e.CBulletShot.type == "spread")
+			{
+				var offx = e.CRender.sprite.width / 2;
+				var offy = e.CRender.sprite.height / 2;
+				
+				bullets.push(createBullet(offx, offy, 0));
+				for(var i = 1; i <= e.CBulletShot.count; i++)
+				{
+					var angle = e.CBulletShot.angle / i;
+					bullets.push(createBullet(offx, offy,  angle));
+					bullets.push(createBullet(offx, offy, -angle));
+				}
+			}
+
+			bullets.forEach( function(bullet) {
+				SSK.game.World.addEntity( bullet );
+			});
+			
 			e.CBulletShot.timer = 0;
+			
 			if( e.CPlayer ) payum_payum_motherfucker.play();
 		}
 		else

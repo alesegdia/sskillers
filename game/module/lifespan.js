@@ -11,7 +11,6 @@ SSK.module.LifeSpan.prototype = {
 		{
 			e.CAlive = false;
 		}
-		//console.log(e.CLifeSpan);
 	},
 
 	performsOver : function(e) {

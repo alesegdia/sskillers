@@ -17,7 +17,7 @@ SSK.screen.GameplayScreen = {
 		cam.player = player;
 		player.cam = cam;
 		var scrolladjust = new SSK.module.ScrollAdjust( cam );
-		var levelsize = new Vec2( 2300, 2700 );
+		var levelsize = new Vec2( 2300 * 2, 2700 * 2 );
 		var playerMouseFollow = new SSK.module.PlayerMouseFollow();
 		var velocityApplyModule = new SSK.module.VelocityApplyModule();
 		var camcontroller = new SSK.module.CamKeyboardController( 300 );
@@ -41,6 +41,7 @@ SSK.screen.GameplayScreen = {
 		this.world.addModule( new SSK.module.LifeSpan() );
 		this.world.addModule( new SSK.module.BulletShot() );
 		this.world.addModule( new SSK.module.ShieldSystem() );
+		this.world.addModule( new SSK.module.OptionModule() );
 		this.world.addEntity( player );
 
 		for( var j = 0; j < 4; j++ )
@@ -54,6 +55,11 @@ SSK.screen.GameplayScreen = {
 		this.world.addEntity( cam );
 		console.log("HEY!!");
 		SSK.game.World = this.world;
+
+		SSK.game.World.addEntity( new SSK.game.entity.Option(player) );
+		SSK.game.World.addEntity( new SSK.game.entity.Option(player) );
+		SSK.game.World.addEntity( new SSK.game.entity.Option(player) );
+	
 	},
 
 	tick : function() {
