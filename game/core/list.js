@@ -18,25 +18,6 @@ var List = function() {
 		this.end.data = data;
 	};
 
-	this.delete = function( data ){
-		var current = this.start;
-		var previous = this.start;
-		while( current !== null ){
-			if( data === current.data ){
-				if( current === this.start ){
-					this.start = current.next;
-					return;
-				}
-				if( current === this.end)
-					this.end = previous;
-				previous.next = current.next;
-				return;
-			}
-			previous = current;
-			current = current.next;
-		}
-	};
-
 	this.delete_if = function( predicate ){
 		var current = this.start;
 		var previous = this.start;
@@ -64,5 +45,37 @@ var List = function() {
 		}
 	};
 
+};
+
+
+var UnorderedList = function() {
+
+	this.data = [];
+
+	this.add = function(element)
+	{
+		this.data.push(element);
+	};
+
+	this.removeByIndex = function(element_index)
+	{
+		this.data[element_index] = this.data[this.data.length - 1];
+		this.data.pop();
+	};
+
+	this.removeIf = function(pred)
+	{
+		var limit = this.data.length;
+		for(var i = 0; i < limit; i++)
+		{
+			var shouldRemove = pred(this.data[i]);
+			if(shouldRemove)
+			{
+				this.data[i] = this.data[this.data.length - 1];
+				this.data.pop();
+				limit--;
+			}
+		}
+	}
 };
 

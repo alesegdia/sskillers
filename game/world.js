@@ -9,7 +9,7 @@ SSK.game.WorldObj = function( cam, player, renderer, w, h ){
 	this.width = w;
 	this.height = h;
 
-	this.entitylist = new List();
+	this.entitylist = new UnorderedList();
 	this.modulelist = [];
 	this.rendermodulelist = [];
 
@@ -82,7 +82,7 @@ SSK.game.WorldObj.prototype = {
 		ys = y + (this.player.CTransform.y) * factor;
 		context.fillRect(xs,ys,3,3);
 
-		this.entitylist.each( function(entity){
+		this.entitylist.data.forEach( function(entity){
 
 			if(entity == null || entity.CTransform == null)
 				{
@@ -111,8 +111,43 @@ SSK.game.WorldObj.prototype = {
 	checkCollisions : function()
 	{
 		var elist = this.entitylist;
-		elist.each( function(e1){
-			elist.each( function(e2){
+		for(var i = 0; i < elist.data.length; i++)
+		{
+			var e1 = elist.data[i];
+			for(var j = i + 1; j < elist.data.length; j++)
+			{
+				var e2 = elist.data[j];
+				if( e1 !== e2 && e1.CCollision && e2.CCollision ) {
+					var collide = false;
+					var i,j;
+					var v1, v2;
+					v1 = new Vec2(0,0);
+					v2 = new Vec2(0,0);
+					for( ii = 0; ii < e1.CBox.length; ii+=2 )
+					{
+						if( collide ) break;
+						for( jj = 0; jj < e2.CBox.length; jj+=2 )
+						{
+							if( collide ) break;
+							v1.set(e1.CTransform.x, e1.CTransform.y);
+							v1.add(e1.CBox[ii]);
+							v2.set(e2.CTransform.x, e2.CTransform.y);
+							v2.add(e2.CBox[jj]);
+							if( rectIntersect( v1, e1.CBox[ii+1],
+								v2, e2.CBox[jj+1] ) == true )
+							{
+								collide = true;
+							}
+						}
+					}
+
+					if( collide ) e1.CCollision.handle( e2 );
+				}
+			}
+		}
+		/*
+		elist.data.forEach( function(e1){
+			elist.data.forEach( function(e2){
 				if( e1 !== e2 && e1.CCollision && e2.CCollision ) {
 					var collide = false;
 					var i,j;
@@ -140,6 +175,7 @@ SSK.game.WorldObj.prototype = {
 					if( collide ) e1.CCollision.handle( e2 );
 				}
 		});});
+		*/
 	},
 
 	tickECS : function()
@@ -148,7 +184,7 @@ SSK.game.WorldObj.prototype = {
 		var entities = this.entitylist;
 		this.modulelist.forEach( function(module) {
 			entitynum = 0;
-			entities.each( function(entity) {
+			entities.data.forEach( function(entity) {
 				entitynum++;
 				if( module.performsOver(entity) ) {
 					module.tick(entity);
@@ -168,10 +204,25 @@ SSK.game.WorldObj.prototype = {
 		this.tickECS();
 
 		// CLEAR DEAD ENTITIES
-		this.entitylist.delete_if( function(entity){
-			return entity.CAlive == false;
-		});
+		this.entitylist.removeIf(function(entity){ return entity.CAlive == false; });
+		/*
+		var toRemove = [];
+		for(var i = 0; i < this.entitylist.data.length; i++)
+		{
+			var entity = this.entitylist.data[i];
+			if(entity.CAlive == false)
+			{
+				toRemove.push(i);
+			}
+		}
 
+		var numRemoved = 0;
+		for(var i = 0; i < toRemove.length; i++)
+		{
+			this.entitylist.removeByIndex(toRemove[i] - numRemoved);
+			numRemoved++;
+		}
+		*/
 
 		if ( this.player.CHealth <= 0 && ok == false ){
 			ok = true;
@@ -251,7 +302,7 @@ SSK.game.WorldObj.prototype = {
 		margin=0;
 		rend = this.renderer;
 		camera = this.cam;
-		this.entitylist.each( function(entity){
+		this.entitylist.data.forEach( function(entity){
 
 			if( renderer.performsOver( entity )  )
 			{
